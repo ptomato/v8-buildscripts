@@ -43,6 +43,8 @@ V8_PATCHSET_IOS=(
   # Fix for [react-native-bottom-sheet](https://github.com/gorhom/react-native-bottom-sheet) not working
   # revert https://chromium-review.googlesource.com/c/v8/v8/+/3548458
   # "fix_for_bottom_sheet.patch"
+
+  "arm64_catalyst.patch"
 )
 
 ######################################################################################
