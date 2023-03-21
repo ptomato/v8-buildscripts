@@ -45,6 +45,9 @@ V8_PATCHSET_IOS=(
   # "fix_for_bottom_sheet.patch"
 
   "arm64_catalyst.patch"
+
+  # Find libclang_rt.iossim.a on Xcode 14
+  "v8_build_xcode14_toolchain_fixes.patch"
 )
 
 ######################################################################################
