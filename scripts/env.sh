@@ -26,7 +26,7 @@ function verify_platform()
     fi
   done
   if [[ -z ${valid_platform} ]]; then
-    echo "Invalid platfrom: ${arg}" >&2
+    echo "Invalid platform: ${arg}" >&2
     exit 1
   fi
   echo ${valid_platform}
