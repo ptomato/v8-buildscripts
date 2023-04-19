@@ -39,7 +39,8 @@ jobs:
           sudo ln -fs /usr/share/zoneinfo/UTC /etc/localtime
           sudo apt-get update
           sudo apt-get upgrade -y
-          sudo apt-get install -y apt-utils sudo lsb-core git python ninja-build nodejs npm wget openjdk-8-jre openjdk-8-jdk
+          sudo apt-get install -y apt-utils git libatomic1-i386-cross lsb-core \
+            ninja-build nodejs npm openjdk-8-jre openjdk-8-jdk python sudo wget
 
       - name: Export settings from npm package
         run: npm run export_npm_env
@@ -52,7 +53,7 @@ jobs:
       - name: Setup V8 build environment
         run: |
           scripts/setup.sh -r ${{ env.V8_VERSION }} android
-          sudo apt-get install -y libatomic1-i386-cross && sudo sh -c 'echo "/usr/i686-linux-gnu/lib" >> /etc/ld.so.conf.d/i386-linux-gnu.conf' && sudo ldconfig
+          sudo sh -c 'echo "/usr/i686-linux-gnu/lib" >> /etc/ld.so.conf.d/i386-linux-gnu.conf' && sudo ldconfig
 
       - name: Patch V8
         run: scripts/patch.sh android
@@ -119,7 +120,8 @@ jobs:
 #           sudo ln -fs /usr/share/zoneinfo/UTC /etc/localtime
 #           sudo apt-get update
 #           sudo apt-get upgrade -y
-#           sudo apt-get install -y apt-utils sudo lsb-core git python nodejs npm wget openjdk-8-jre openjdk-8-jdk
+#           sudo apt-get install -y apt-utils git libatomic1-i386-cross lsb-core \
+#             ninja-build nodejs npm openjdk-8-jre openjdk-8-jdk python sudo wget
 #
 #       - name: Export settings from npm package
 #         run: npm run export_npm_env
@@ -135,7 +137,7 @@ jobs:
 #       - name: Setup V8 build environment
 #         run: |
 #           scripts/setup.sh -r ${{ env.V8_VERSION }} android
-#           sudo apt-get install -y libatomic1-i386-cross && sudo sh -c 'echo "/usr/i686-linux-gnu/lib" >> /etc/ld.so.conf.d/i386-linux-gnu.conf' && sudo ldconfig
+#           sudo sh -c 'echo "/usr/i686-linux-gnu/lib" >> /etc/ld.so.conf.d/i386-linux-gnu.conf' && sudo ldconfig
 #
 #       - name: Patch V8
 #         run: scripts/patch.sh android
@@ -185,7 +187,8 @@ jobs:
 #           sudo ln -fs /usr/share/zoneinfo/UTC /etc/localtime
 #           sudo apt-get update
 #           sudo apt-get upgrade -y
-#           sudo apt-get install -y apt-utils sudo lsb-core git python nodejs npm wget openjdk-8-jre openjdk-8-jdk
+#           sudo apt-get install -y apt-utils git libatomic1-i386-cross lsb-core \
+#             ninja-build nodejs npm openjdk-8-jre openjdk-8-jdk python sudo wget
 #
 #       - name: Export settings from npm package
 #         run: npm run export_npm_env
@@ -201,7 +204,7 @@ jobs:
 #       - name: Setup V8 build environment
 #         run: |
 #           scripts/setup.sh -r ${{ env.V8_VERSION }} android
-#           sudo apt-get install -y libatomic1-i386-cross && sudo sh -c 'echo "/usr/i686-linux-gnu/lib" >> /etc/ld.so.conf.d/i386-linux-gnu.conf' && sudo ldconfig
+#           sudo sh -c 'echo "/usr/i686-linux-gnu/lib" >> /etc/ld.so.conf.d/i386-linux-gnu.conf' && sudo ldconfig
 #
 #       - name: Patch V8
 #         run: scripts/patch.sh android
