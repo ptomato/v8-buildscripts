@@ -11,6 +11,5 @@ gclient sync --deps=${PLATFORM} --reset --with_branch_head --revision ${V8_VERSI
 
 cd "${ROOT_DIR}"
 scripts/patch.sh ${PLATFORM}
-
-NO_INTL=true scripts/build.sh ${PLATFORM}
-NO_INTL=true scripts/archive.sh ${PLATFORM}
+scripts/build.sh ${PLATFORM}
+scripts/archive.sh ${PLATFORM}

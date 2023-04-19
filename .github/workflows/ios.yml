@@ -5,9 +5,6 @@ on: [workflow_dispatch]
 jobs:
   build:
     runs-on: macOS-latest
-    env:
-      NO_INTL: true
-      NO_JIT: true
 
     steps:
     - uses: actions/checkout@v3

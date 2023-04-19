@@ -1,21 +1,7 @@
 #!/bin/bash -e
 source $(dirname $0)/env.sh
 
-function makeDistPackageDir() {
-  local jit_suffix=""
-  local intl_suffix=""
-  if [[ ${NO_JIT} != "true" ]]; then
-    jit_suffix="-jit"
-  fi
-
-  if [[ ${NO_INTL} = "true" ]]; then
-    intl_suffix="-nointl"
-  fi
-
-  echo "${DIST_DIR}/packages/v8-${PLATFORM}${jit_suffix}${intl_suffix}"
-}
-
-DIST_PACKAGE_DIR=$(makeDistPackageDir)
+DIST_PACKAGE_DIR="${DIST_DIR}/packages/v8-${PLATFORM}"
 
 function createAAR() {
   printf "\n\n\t\t===================== create aar =====================\n\n"

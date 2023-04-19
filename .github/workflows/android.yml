@@ -9,18 +9,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        variant: [jit-nointl]
-
     container:
       image: kudo/ubuntu-nonroot:20.04
       options: --user root
       env:
         DEBIAN_FRONTEND: noninteractive
         TZ: UTC
-        NO_INTL: ${{ contains(matrix.variant, 'nointl') }}
-        NO_JIT: ${{ !contains(matrix.variant, 'jit') }}
 
     steps:
       - name: Print environment varariables
@@ -81,14 +75,14 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: dist-${{ matrix.variant }}
+          name: dist-${{ env.V8_VERSION }}
           path: dist.tar
 
 
 ###############################################################
-# Backup config for triggering variant x arch matrix build
+# Backup config for triggering arch matrix build
 # Archiving is not finished yet.
-# Since actions/cache unable to work well, there will be 4x4 gclient sync.
+# Since actions/cache unable to work well, there will be 4 gclient sync.
 # It's getting a little waste from network bandwidth.
 # That's the main reason not adopted.
 ###############################################################
@@ -101,8 +95,6 @@ jobs:
 #       env:
 #         DEBIAN_FRONTEND: noninteractive
 #         TZ: UTC
-#         NO_INTL: 0
-#         NO_JIT: 1
 #         CACHE_KEY_SUFFIX: v3
 #
 #     steps:
@@ -157,19 +149,13 @@ jobs:
 #
 #     strategy:
 #       matrix:
-#         variant: [intl, nointl, jit-intl, jit-nointl]
 #         arch: [arm, x86, arm64, x64]
-#         exclude:
-#           - variant: intl
-#             arch: arm
 #
 #     container:
 #       image: kudo/ubuntu-nonroot:18.04
 #       env:
 #         DEBIAN_FRONTEND: noninteractive
 #         TZ: UTC
-#         NO_INTL: ${{ contains(matrix.variant, 'nointl') && 1 }}
-#         NO_JIT: ${{ !contains(matrix.variant, 'jit' && 1) }}
 #         CACHE_KEY_SUFFIX: v3
 #
 #     steps:

@@ -19,23 +19,24 @@ GN_ARGS_BASE="
   v8_enable_debugging_features=false
   v8_enable_webassembly=true
   v8_use_external_startup_data=false
+  v8_enable_i18n_support=false
   is_official_build=true
   target_os=\"${PLATFORM}\"
 "
 
 if [[ ${PLATFORM} = "ios" ]]; then
-  GN_ARGS_BASE="${GN_ARGS_BASE} enable_ios_bitcode=false use_xcode_clang=true ios_enable_code_signing=false v8_enable_pointer_compression=false ios_deployment_target=\"${IOS_DEPLOYMENT_TARGET}\""
+  GN_ARGS_BASE="
+    ${GN_ARGS_BASE}
+    enable_ios_bitcode=false
+    use_xcode_clang=true
+    ios_enable_code_signing=false
+    v8_enable_pointer_compression=false
+    v8_enable_lite_mode=true
+    ios_deployment_target=\"${IOS_DEPLOYMENT_TARGET}\"
+  "
 elif [[ ${PLATFORM} = "android" ]]; then
   # Workaround v8 sysroot build issues with custom ndk
   GN_ARGS_BASE="${GN_ARGS_BASE} use_thin_lto=false use_sysroot=false"
-fi
-
-if [[ ${NO_INTL} = "true" ]]; then
-  GN_ARGS_BASE="${GN_ARGS_BASE} v8_enable_i18n_support=false"
-fi
-
-if [[ ${NO_JIT} = "true" ]]; then
-  GN_ARGS_BASE="${GN_ARGS_BASE} v8_enable_lite_mode=true"
 fi
 
 if [[ "$BUILD_TYPE" = "Debug" ]]
@@ -92,7 +93,7 @@ function buildArch()
   local arch=$1
   local platform_arch=$(normalize_arch_for_platform $arch)
 
-  echo "Build v8 ${arch} variant NO_INTL=${NO_INTL} NO_JIT=${NO_JIT}"
+  echo "Build v8 ${arch}"
   gn gen --args="${GN_ARGS_BASE} ${GN_ARGS_BUILD_TYPE} v8_target_cpu=\"${arch}\" target_cpu=\"${arch}\"" "out.v8.${arch}"
 
   date ; ninja ${NINJA_PARAMS} -C "out.v8.${arch}" ; date
