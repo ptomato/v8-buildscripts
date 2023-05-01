@@ -3,35 +3,10 @@ source $(dirname $0)/env.sh
 
 DIST_PACKAGE_DIR="${DIST_DIR}/packages/v8-${PLATFORM}"
 
-function createAAR() {
-  printf "\n\n\t\t===================== create aar =====================\n\n"
-  pushd .
-  cd "${ROOT_DIR}/lib"
-  ./gradlew clean :v8-android:createAAR --project-prop distDir="$DIST_PACKAGE_DIR" --project-prop version="$VERSION"
-  popd
-}
-
-function copyAndroidTools() {
-  printf "\n\n\t\t===================== copy android tools =====================\n\n"
-  mkdir "${DIST_PACKAGE_DIR}/android"
-  mkdir "${DIST_PACKAGE_DIR}/android/ndk"
-  mkdir "${DIST_PACKAGE_DIR}/android/sdk"
-  cp -Rf "${V8_DIR}/third_party/android_ndk" "${DIST_PACKAGE_DIR}/android/ndk"
-  cp -Rf "${V8_DIR}/third_party/android_sdk" "${DIST_PACKAGE_DIR}/android/sdk"
-}
-
 function copyDylib() {
   printf "\n\n\t\t===================== copy dylib =====================\n\n"
   mkdir -p "${DIST_PACKAGE_DIR}"
   cp -Rf "${BUILD_DIR}/lib" "${DIST_PACKAGE_DIR}/"
-}
-
-function createUnstrippedLibs() {
-  printf "\n\n\t\t===================== create unstripped libs =====================\n\n"
-  DIST_LIB_UNSTRIPPED_DIR="${DIST_PACKAGE_DIR}/lib.unstripped/v8-${PLATFORM}/${VERSION}"
-  mkdir -p "${DIST_LIB_UNSTRIPPED_DIR}"
-  tar cfJ "${DIST_LIB_UNSTRIPPED_DIR}/libs.tar.xz" -C "${BUILD_DIR}/lib.unstripped" .
-  unset DIST_LIB_UNSTRIPPED_DIR
 }
 
 function copyHeaders() {
@@ -47,7 +22,6 @@ if [[ ${PLATFORM} = "android" ]]; then
 
   mkdir -p "${DIST_PACKAGE_DIR}"
   copyDylib
-  # copyAndroidTools
   # copyHeaders
 elif [[ ${PLATFORM} = "ios" ]]; then
   copyDylib
