@@ -58,61 +58,14 @@ fi
 
 cd "$V8_DIR"
 
-function normalize_arch_for_platform()
-{
-  local arch=$1
-
-  if [[ ${PLATFORM} = "ios" ]]; then
-    echo "$arch"
-    return
-  fi
-
-  case "$1" in
-    arm)
-      echo "armeabi-v7a"
-      ;;
-    x86)
-      echo "x86"
-      ;;
-    arm64)
-      echo "arm64-v8a"
-      ;;
-    x64)
-      echo "x86_64"
-      ;;
-    *)
-      echo "Invalid arch - ${arch}" >&2
-      exit 1
-      ;;
-  esac
-}
-
 function buildArch()
 {
   local arch=$1
-  local platform_arch
-  platform_arch=$(normalize_arch_for_platform "$arch")
 
   echo "Build v8 ${arch}"
   gn gen --args="${GN_ARGS_BASE} ${GN_ARGS_BUILD_TYPE} v8_target_cpu=\"${arch}\" target_cpu=\"${arch}\"" "out.v8.${arch}"
 
   date ; ninja "$NINJA_PARAMS" -C "out.v8.$arch" ; date
-  copyLib "$arch"
-}
-
-function copyLib()
-{
-  local arch=$1
-  local platform_arch
-  platform_arch=$(normalize_arch_for_platform "$arch")
-
-  mkdir -p "${BUILD_DIR}/lib/${platform_arch}"
-  cp -rf "out.v8.${arch}" "${BUILD_DIR}/lib/${platform_arch}/"
-
-  if [[ -d "out.v8.${arch}/lib.unstripped" ]]; then
-    mkdir -p "${BUILD_DIR}/lib.unstripped/${platform_arch}"
-    cp -rf "out.v8.${arch}/lib.unstripped" "${BUILD_DIR}/lib.unstripped/${platform_arch}/"
-  fi
 }
 
 if [[ ${ARCH} ]]; then
