@@ -1,5 +1,5 @@
 #!/bin/bash -e
-source $(dirname $0)/env.sh
+source "$(dirname "$0")/env.sh"
 
 DIST_PACKAGE_DIR="${DIST_DIR}/packages/v8-${PLATFORM}"
 
@@ -10,7 +10,7 @@ function copyDylib() {
 }
 
 function copyHeaders() {
-  printf "\n\n\t\t===================== adding headers to ${DIST_PACKAGE_DIR}/include =====================\n\n"
+  printf "\n\n\t\t===================== adding headers to %s/include =====================\n\n" "$DIST_PACKAGE_DIR"
   cp -Rf "${V8_DIR}/include" "${DIST_PACKAGE_DIR}/include"
 }
 

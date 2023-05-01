@@ -1,19 +1,22 @@
 #!/bin/bash -e
 
-GCLIENT_SYNC_ARGS="--reset --with_branch_head"
+GCLIENT_SYNC_ARGS=(--reset --with_branch_head)
 while getopts 'r:s' opt; do
   case ${opt} in
     r)
-      GCLIENT_SYNC_ARGS+=" --revision ${OPTARG}"
+      GCLIENT_SYNC_ARGS=("${GCLIENT_SYNC_ARGS[@]}" --revision "$OPTARG")
       ;;
     s)
-      GCLIENT_SYNC_ARGS+=" --no-history"
+      GCLIENT_SYNC_ARGS=("${GCLIENT_SYNC_ARGS[@]}" --no-history)
+      ;;
+    *)
+      echo "ignored option '$opt'"
       ;;
   esac
 done
-shift $(expr ${OPTIND} - 1)
+shift $((OPTIND - 1))
 
-source $(dirname $0)/env.sh
+source "$(dirname "$0")/env.sh"
 
 # Install NDK
 function installNDK() {
@@ -34,13 +37,13 @@ echo Running: gclient config --name v8 --unmanaged "https://chromium.googlesourc
 gclient config --name v8 --unmanaged "https://chromium.googlesource.com/v8/v8.git"
 
 if [[ ${PLATFORM} = "ios" ]]; then
-  echo Running: gclient sync --deps=ios ${GCLIENT_SYNC_ARGS}
-  gclient sync --deps=ios ${GCLIENT_SYNC_ARGS}
+  echo Running: gclient sync --deps=ios "${GCLIENT_SYNC_ARGS[@]}"
+  gclient sync --deps=ios "${GCLIENT_SYNC_ARGS[@]}"
   exit 0
 fi
 
 if [[ ${PLATFORM} = "android" ]]; then
-  gclient sync --deps=android ${GCLIENT_SYNC_ARGS} || true
+  gclient sync --deps=android "${GCLIENT_SYNC_ARGS[@]}" || true
   sed -i "s#2c2138e811487b13020eb331482fb991fd399d4e#083aa67a0d3309ebe37eafbe7bfd96c235a019cf#g" v8/DEPS
   gclient sync --deps=android
 

@@ -11,7 +11,7 @@ function abs_path()
     readlink="greadlink -f"
   fi
 
-  echo `$readlink $1`
+  $readlink "$1"
 }
 
 function verify_platform()
@@ -19,9 +19,9 @@ function verify_platform()
   local arg=$1
   SUPPORTED_PLATFORMS=(android ios)
   local valid_platform=
-  for platform in ${SUPPORTED_PLATFORMS[@]}
+  for platform in "${SUPPORTED_PLATFORMS[@]}"
   do
-    if [[ ${arg} = ${platform} ]]; then
+    if [[ ${arg} = "$platform" ]]; then
       valid_platform=${platform}
     fi
   done
@@ -29,21 +29,23 @@ function verify_platform()
     echo "Invalid platform: ${arg}" >&2
     exit 1
   fi
-  echo ${valid_platform}
+  echo "$valid_platform"
 }
 
-CURR_DIR=$(dirname $(abs_path $0))
-ROOT_DIR=$(dirname ${CURR_DIR})
+CURR_DIR=$(dirname "$(abs_path "$0")")
+ROOT_DIR=$(dirname "$CURR_DIR")
+export ROOT_DIR
 unset CURR_DIR
 
-DEPOT_TOOLS_DIR="${ROOT_DIR}/scripts/depot_tools"
-BUILD_DIR="${ROOT_DIR}/build"
-V8_DIR="${ROOT_DIR}/v8"
-DIST_DIR="${ROOT_DIR}/dist"
-PATCHES_DIR="${ROOT_DIR}/patches"
+export DEPOT_TOOLS_DIR="$ROOT_DIR/scripts/depot_tools"
+export BUILD_DIR="$ROOT_DIR/build"
+export V8_DIR="$ROOT_DIR/v8"
+export DIST_DIR="$ROOT_DIR/dist"
+export PATCHES_DIR="$ROOT_DIR/patches"
 
-NDK_VERSION="r21e"
-IOS_DEPLOYMENT_TARGET="9"
+export NDK_VERSION="r21e"
+export IOS_DEPLOYMENT_TARGET="9"
 
 export PATH="$DEPOT_TOOLS_DIR:$PATH"
-PLATFORM=$(verify_platform $1)
+PLATFORM=$(verify_platform "$1")
+export PLATFORM

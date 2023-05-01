@@ -1,5 +1,5 @@
 #!/bin/bash -e
-source $(dirname $0)/env.sh
+source "$(dirname "$0")/env.sh"
 BUILD_TYPE="Release"
 # BUILD_TYPE="Debug"
 
@@ -57,14 +57,14 @@ if [[ ${CIRCLECI} ]]; then
   NINJA_PARAMS="-j4"
 fi
 
-cd ${V8_DIR}
+cd "$V8_DIR"
 
 function normalize_arch_for_platform()
 {
   local arch=$1
 
   if [[ ${PLATFORM} = "ios" ]]; then
-    echo ${arch}
+    echo "$arch"
     return
   fi
 
@@ -91,19 +91,21 @@ function normalize_arch_for_platform()
 function buildArch()
 {
   local arch=$1
-  local platform_arch=$(normalize_arch_for_platform $arch)
+  local platform_arch
+  platform_arch=$(normalize_arch_for_platform "$arch")
 
   echo "Build v8 ${arch}"
   gn gen --args="${GN_ARGS_BASE} ${GN_ARGS_BUILD_TYPE} v8_target_cpu=\"${arch}\" target_cpu=\"${arch}\"" "out.v8.${arch}"
 
-  date ; ninja ${NINJA_PARAMS} -C "out.v8.${arch}" ; date
-  copyLib $arch
+  date ; ninja "$NINJA_PARAMS" -C "out.v8.$arch" ; date
+  copyLib "$arch"
 }
 
 function copyLib()
 {
   local arch=$1
-  local platform_arch=$(normalize_arch_for_platform $arch)
+  local platform_arch
+  platform_arch=$(normalize_arch_for_platform "$arch")
 
   mkdir -p "${BUILD_DIR}/lib/${platform_arch}"
   cp -rf "out.v8.${arch}" "${BUILD_DIR}/lib/${platform_arch}/"
