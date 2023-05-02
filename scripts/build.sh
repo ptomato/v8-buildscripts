@@ -1,4 +1,18 @@
 #!/bin/bash -e
+
+NINJA_PARAMS=
+while getopts 'j:' opt; do
+  case ${opt} in
+    j)
+      NINJA_PARAMS="-j$OPTARG"
+      ;;
+    *)
+      echo "ignored option '$opt'"
+      ;;
+  esac
+done
+shift $((OPTIND - 1))
+
 source "$(dirname "$0")/env.sh"
 BUILD_TYPE="Release"
 # BUILD_TYPE="Debug"
@@ -48,12 +62,6 @@ else
   GN_ARGS_BUILD_TYPE='
     is_debug=false
   '
-fi
-
-NINJA_PARAMS=""
-
-if [[ ${CIRCLECI} ]]; then
-  NINJA_PARAMS="-j4"
 fi
 
 cd "$V8_DIR"

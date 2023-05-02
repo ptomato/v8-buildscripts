@@ -39,7 +39,7 @@ jobs:
 
     - name: Build V8
       run: |
-        scripts/build.sh ios x64
+        scripts/build.sh -j3 ios x64
         scripts/archive.sh ios x64 ${{ inputs.publish }}
 
     - name: Archive
