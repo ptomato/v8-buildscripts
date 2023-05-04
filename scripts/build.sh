@@ -31,7 +31,6 @@ GN_ARGS_BASE="
   v8_enable_debugging_features=false
   v8_use_external_startup_data=false
   v8_enable_i18n_support=false
-  is_official_build=true
   target_os=\"${PLATFORM}\"
 "
 
@@ -82,6 +81,7 @@ then
   '
 else
   GN_ARGS_BUILD_TYPE='
+    is_official_build=true
     is_debug=false
   '
 fi
