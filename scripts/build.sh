@@ -45,6 +45,21 @@ if [[ ${PLATFORM} = "ios" ]]; then
     ios_deployment_target=\"${IOS_DEPLOYMENT_TARGET}\"
     target_environment=\"${IOS_TARGET_ENV}\"
   "
+  # Build certain components
+  NINJA_TARGETS=(
+    v8_base_without_compiler
+    v8_compiler
+    v8_libplatform
+    v8_libbase
+    v8_bigint
+    v8_snapshot
+    torque_generated_initializers
+    torque_generated_definitions
+    cppgc_base
+    v8_heap_base_headers
+    v8_heap_base
+    inspector
+  )
 elif [[ ${PLATFORM} = "android" ]]; then
   # Workaround v8 sysroot build issues with custom ndk
   GN_ARGS_BASE="${GN_ARGS_BASE} use_thin_lto=false use_sysroot=false"
@@ -53,6 +68,8 @@ elif [[ ${PLATFORM} = "android" ]]; then
     v8_enable_webassembly=true
     default_min_sdk_version=17
   "
+  # Default target
+  NINJA_TARGETS=()
 fi
 
 if [[ "$BUILD_TYPE" = "Debug" ]]
@@ -76,7 +93,7 @@ function buildArch()
   echo "Build v8 ${arch}"
   gn gen --args="${GN_ARGS_BASE} ${GN_ARGS_BUILD_TYPE} v8_target_cpu=\"${arch}\" target_cpu=\"${arch}\"" "out.v8.${arch}"
 
-  date ; ninja "$NINJA_PARAMS" -C "out.v8.$arch" ; date
+  date ; ninja "$NINJA_PARAMS" -C "out.v8.$arch" "${NINJA_TARGETS[@]}" ; date
 }
 
 if [[ ${ARCH} ]]; then
