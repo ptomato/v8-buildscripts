@@ -47,8 +47,8 @@ if [[ ${PLATFORM} = "android" ]]; then
   sed -i "s#2c2138e811487b13020eb331482fb991fd399d4e#083aa67a0d3309ebe37eafbe7bfd96c235a019cf#g" v8/DEPS
   gclient sync --deps=android
 
-  # Patch build-deps installer for snapd not available in docker
-  patch -d "${V8_DIR}" -p1 < "${PATCHES_DIR}/prebuild_no_snapd.patch"
+  # Patch build-deps installer to install fewer dependencies
+  patch -d "${V8_DIR}" -p1 < "${PATCHES_DIR}/fewer_deps.patch"
 
   sudo bash -c 'v8/build/install-build-deps-android.sh'
   sudo apt-get -y install \
@@ -67,7 +67,7 @@ if [[ ${PLATFORM} = "android" ]]; then
       libsfstdc++-10-dev-armhf-cross
 
   # Reset changes after installation
-  patch -d "${V8_DIR}" -p1 -R < "${PATCHES_DIR}/prebuild_no_snapd.patch"
+  patch -d "${V8_DIR}" -p1 -R < "${PATCHES_DIR}/fewer_deps.patch"
 
   # Workaround to install missing sysroot
   gclient sync
