@@ -28,6 +28,14 @@ on:
         required: true
         default: true
         type: boolean
+      build_type:
+        description: Build type
+        required: true
+        default: release
+        type: choice
+        options:
+          - debug
+          - release
       publish:
         description: Artifacts to publish
         required: true
@@ -65,6 +73,7 @@ jobs:
     - name: Build V8 (arm64 device)
       if: ${{ inputs.arch_arm64_device }}
       env:
+        BUILD_TYPE: ${{ inputs.build_type }}
         IOS_TARGET_ENV: device
       run: |
         scripts/build.sh -j3 ios arm64
@@ -73,6 +82,7 @@ jobs:
     - name: Build V8 (arm64 simulator)
       if: ${{ inputs.arch_arm64_simulator }}
       env:
+        BUILD_TYPE: ${{ inputs.build_type }}
         IOS_TARGET_ENV: simulator
       run: |
         scripts/build.sh -j3 ios arm64
@@ -81,6 +91,7 @@ jobs:
     - name: Build V8 (arm64 catalyst)
       if: ${{ inputs.arch_arm64_catalyst }}
       env:
+        BUILD_TYPE: ${{ inputs.build_type }}
         IOS_TARGET_ENV: catalyst
       run: |
         scripts/build.sh -j3 ios arm64
@@ -89,6 +100,7 @@ jobs:
     - name: Build V8 (x64 simulator)
       if: ${{ inputs.arch_x86_64_simulator }}
       env:
+        BUILD_TYPE: ${{ inputs.build_type }}
         IOS_TARGET_ENV: simulator
       run: |
         scripts/build.sh -j3 ios x64
@@ -97,6 +109,7 @@ jobs:
     - name: Build V8 (x64 catalyst)
       if: ${{ inputs.arch_x86_64_catalyst }}
       env:
+        BUILD_TYPE: ${{ inputs.build_type }}
         IOS_TARGET_ENV: catalyst
       run: |
         scripts/build.sh -j3 ios x64
@@ -108,5 +121,5 @@ jobs:
 
     - uses: actions/upload-artifact@v3
       with:
-        name: dist-ios-${{ env.V8_VERSION }}-${{ inputs.publish }}
+        name: dist-ios-${{ env.V8_VERSION }}-${{ inputs.publish }}-${{ inputs.build_type }}
         path: dist.tar

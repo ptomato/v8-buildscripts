@@ -64,7 +64,7 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: dist-android-${{ env.V8_VERSION }}-${{ inputs.publish }}
+          name: dist-android-${{ env.V8_VERSION }}-${{ inputs.publish }}-release
           path: dist.tar
 
 

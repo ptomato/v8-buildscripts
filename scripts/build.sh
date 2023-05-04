@@ -14,8 +14,6 @@ done
 shift $((OPTIND - 1))
 
 source "$(dirname "$0")/env.sh"
-BUILD_TYPE="Release"
-# BUILD_TYPE="Debug"
 
 # $1 is ${PLATFORM} which parse commonly from env.sh
 ARCH=$2
@@ -63,7 +61,7 @@ elif [[ ${PLATFORM} = "android" ]]; then
   NINJA_TARGETS=()
 fi
 
-if [[ "$BUILD_TYPE" = "Debug" ]]
+if [[ "$BUILD_TYPE" = "debug" ]]
 then
   GN_ARGS_BUILD_TYPE='
     is_debug=true

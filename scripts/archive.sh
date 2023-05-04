@@ -87,7 +87,7 @@ function archiveLibIOS() {
   echo "    OBJECTS= $OBJECTS"
   ar r $MODULE_DEST $OBJECTS || echo "Failed to archive $MODULE_DEST"
 
-  if [[ "$BUILD_TYPE" = "Release" ]]; then
+  if [[ "$BUILD_TYPE" = "release" ]]; then
     echo "--- Stripping $MODULE_DEST"
     strip $MODULE_DEST || echo "Failed to strip $MODULE_DEST"
   fi
