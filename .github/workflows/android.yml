@@ -22,20 +22,10 @@ jobs:
 
     container:
       image: kudo/ubuntu-nonroot:20.04
-      options: --user root
-      env:
-        DEBIAN_FRONTEND: noninteractive
-        TZ: UTC
 
     steps:
       - name: Print environment varariables
         run: env | grep GITHUB | sort
-      - name: Setup docker workspace
-        run: |
-            sudo sh -c "chown -R ubuntu $HOME"
-            sudo sh -c "chmod 777 $GITHUB_WORKSPACE"
-            # sudo sh -c "chmod 777 $GITHUB_WORKSPACE/../../_temp"
-            sudo sh -c "chmod 777 /home"
 
       - uses: actions/checkout@v3
 
@@ -44,8 +34,8 @@ jobs:
           sudo ln -fs /usr/share/zoneinfo/UTC /etc/localtime
           sudo apt-get update
           sudo apt-get upgrade -y
-          sudo apt-get install -y apt-utils git libatomic1-i386-cross lsb-core \
-            ninja-build nodejs npm openjdk-8-jre openjdk-8-jdk python sudo wget
+          sudo apt-get install -y apt-utils git lsb-core ninja-build npm \
+            python3 wget
 
       - name: Export settings from npm package
         run: npm run export_npm_env
@@ -107,18 +97,9 @@ jobs:
 #     container:
 #       image: kudo/ubuntu-nonroot:18.04
 #       env:
-#         DEBIAN_FRONTEND: noninteractive
-#         TZ: UTC
 #         CACHE_KEY_SUFFIX: v3
 #
 #     steps:
-#       - name: Setup docker workspace
-#         run: |
-#             sudo sh -c "chown -R ubuntu $HOME"
-#             sudo sh -c "chmod 777 $GITHUB_WORKSPACE"
-#             sudo sh -c "chmod 777 $GITHUB_WORKSPACE/../../_temp"
-#             sudo sh -c "chmod 777 /home"
-#
 #       - uses: actions/checkout@v3
 #
 #       - name: Setup Ubuntu environment
@@ -126,8 +107,8 @@ jobs:
 #           sudo ln -fs /usr/share/zoneinfo/UTC /etc/localtime
 #           sudo apt-get update
 #           sudo apt-get upgrade -y
-#           sudo apt-get install -y apt-utils git libatomic1-i386-cross lsb-core \
-#             ninja-build nodejs npm openjdk-8-jre openjdk-8-jdk python sudo wget
+#           sudo apt-get install -y apt-utils git lsb-core ninja-build npm \
+#             python3 wget
 #
 #       - name: Export settings from npm package
 #         run: npm run export_npm_env
@@ -168,18 +149,9 @@ jobs:
 #     container:
 #       image: kudo/ubuntu-nonroot:18.04
 #       env:
-#         DEBIAN_FRONTEND: noninteractive
-#         TZ: UTC
 #         CACHE_KEY_SUFFIX: v3
 #
 #     steps:
-#       - name: Setup docker workspace
-#         run: |
-#             sudo sh -c "chown -R ubuntu $HOME"
-#             sudo sh -c "chmod 777 $GITHUB_WORKSPACE"
-#             sudo sh -c "chmod 777 $GITHUB_WORKSPACE/../../_temp"
-#             sudo sh -c "chmod 777 /home"
-#
 #       - uses: actions/checkout@v3
 #
 #       - name: Setup Ubuntu environment
@@ -187,8 +159,8 @@ jobs:
 #           sudo ln -fs /usr/share/zoneinfo/UTC /etc/localtime
 #           sudo apt-get update
 #           sudo apt-get upgrade -y
-#           sudo apt-get install -y apt-utils git libatomic1-i386-cross lsb-core \
-#             ninja-build nodejs npm openjdk-8-jre openjdk-8-jdk python sudo wget
+#           sudo apt-get install -y apt-utils git lsb-core ninja-build npm \
+#             python3 wget
 #
 #       - name: Export settings from npm package
 #         run: npm run export_npm_env
