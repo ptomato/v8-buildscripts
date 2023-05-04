@@ -52,14 +52,12 @@ if [[ ${PLATFORM} = "android" ]]; then
 
   sudo bash -c 'v8/build/install-build-deps-android.sh'
   sudo apt-get -y install \
-      libc6-dev \
       libc6-dev-i386 \
       libc6-dev-armel-cross \
       libc6-dev-armhf-cross \
       libc6-dev-arm64-cross \
       libc6-dev-armel-armhf-cross \
       libgcc-10-dev-armhf-cross \
-      libstdc++-9-dev \
       lib32stdc++-9-dev \
       libx32stdc++-9-dev \
       libstdc++-10-dev-armhf-cross \
