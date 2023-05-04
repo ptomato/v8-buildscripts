@@ -26,11 +26,9 @@ GN_ARGS_BASE="
   v8_static_library=true
   use_custom_libcxx=false
   treat_warnings_as_errors=false
-  default_min_sdk_version=17
   symbol_level=0
   v8_enable_v8_checks=false
   v8_enable_debugging_features=false
-  v8_enable_webassembly=true
   v8_use_external_startup_data=false
   v8_enable_i18n_support=false
   is_official_build=true
@@ -50,6 +48,11 @@ if [[ ${PLATFORM} = "ios" ]]; then
 elif [[ ${PLATFORM} = "android" ]]; then
   # Workaround v8 sysroot build issues with custom ndk
   GN_ARGS_BASE="${GN_ARGS_BASE} use_thin_lto=false use_sysroot=false"
+  # WebAssembly not compatible with JITless lite mode
+  GN_ARGS_BASE="$GN_ARGS_BASE
+    v8_enable_webassembly=true
+    default_min_sdk_version=17
+  "
 fi
 
 if [[ "$BUILD_TYPE" = "Debug" ]]
