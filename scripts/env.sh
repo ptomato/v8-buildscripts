@@ -45,6 +45,8 @@ export PATCHES_DIR="$ROOT_DIR/patches"
 
 export NDK_VERSION="r21e"
 export IOS_DEPLOYMENT_TARGET="9"
+# "simulator", "device", "catalyst"
+export IOS_TARGET_ENV=${IOS_TARGET_ENV:-simulator}
 
 export PATH="$DEPOT_TOOLS_DIR:$PATH"
 PLATFORM=$(verify_platform "$1")

@@ -31,6 +31,7 @@ if [[ ${PLATFORM} = "ios" ]]; then
     v8_enable_pointer_compression=false
     v8_enable_lite_mode=true
     ios_deployment_target=\"${IOS_DEPLOYMENT_TARGET}\"
+    target_environment=\"${IOS_TARGET_ENV}\"
   "
 elif [[ ${PLATFORM} = "android" ]]; then
   # Workaround v8 sysroot build issues with custom ndk
