@@ -48,5 +48,5 @@ jobs:
 
     - uses: actions/upload-artifact@v3
       with:
-        name: dist-${{ env.V8_VERSION }}-${{ inputs.publish }}
+        name: dist-ios-${{ env.V8_VERSION }}-${{ inputs.publish }}
         path: dist.tar
