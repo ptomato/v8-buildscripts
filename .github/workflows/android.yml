@@ -21,21 +21,13 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: kudo/ubuntu-nonroot:20.04
+      image: ghcr.io/${{ github.repository }}:unified
 
     steps:
       - name: Print environment varariables
         run: env | grep GITHUB | sort
 
       - uses: actions/checkout@v3
-
-      - name: Setup Ubuntu environment
-        run: |
-          sudo ln -fs /usr/share/zoneinfo/UTC /etc/localtime
-          sudo apt-get update
-          sudo apt-get upgrade -y
-          sudo apt-get install -y apt-utils git lsb-core ninja-build npm \
-            python3 wget
 
       - name: Export settings from npm package
         run: npm run export_npm_env
@@ -46,9 +38,7 @@ jobs:
       #     key: android-v8-${{ env.V8_VERSION }}-${{ env.CACHE_KEY_SUFFIX }}
 
       - name: Setup V8 build environment
-        run: |
-          scripts/setup.sh -r ${{ env.V8_VERSION }} android
-          sudo sh -c 'echo "/usr/i686-linux-gnu/lib" >> /etc/ld.so.conf.d/i386-linux-gnu.conf' && sudo ldconfig
+        run: scripts/setup.sh -r ${{ env.V8_VERSION }} android
 
       - name: Patch V8
         run: scripts/patch.sh android
@@ -95,20 +85,12 @@ jobs:
 #     runs-on: ubuntu-latest
 #
 #     container:
-#       image: kudo/ubuntu-nonroot:18.04
+#       image: ghcr.io/${{ github.repository }}:unified
 #       env:
 #         CACHE_KEY_SUFFIX: v3
 #
 #     steps:
 #       - uses: actions/checkout@v3
-#
-#       - name: Setup Ubuntu environment
-#         run: |
-#           sudo ln -fs /usr/share/zoneinfo/UTC /etc/localtime
-#           sudo apt-get update
-#           sudo apt-get upgrade -y
-#           sudo apt-get install -y apt-utils git lsb-core ninja-build npm \
-#             python3 wget
 #
 #       - name: Export settings from npm package
 #         run: npm run export_npm_env
@@ -122,9 +104,7 @@ jobs:
 #       #       android-v8-
 #
 #       - name: Setup V8 build environment
-#         run: |
-#           scripts/setup.sh -r ${{ env.V8_VERSION }} android
-#           sudo sh -c 'echo "/usr/i686-linux-gnu/lib" >> /etc/ld.so.conf.d/i386-linux-gnu.conf' && sudo ldconfig
+#         run: scripts/setup.sh -r ${{ env.V8_VERSION }} android
 #
 #       - name: Patch V8
 #         run: scripts/patch.sh android
@@ -147,20 +127,12 @@ jobs:
 #         arch: [arm, x86, arm64, x64]
 #
 #     container:
-#       image: kudo/ubuntu-nonroot:18.04
+#       image: ghcr.io/${{ github.repository }}:unified
 #       env:
 #         CACHE_KEY_SUFFIX: v3
 #
 #     steps:
 #       - uses: actions/checkout@v3
-#
-#       - name: Setup Ubuntu environment
-#         run: |
-#           sudo ln -fs /usr/share/zoneinfo/UTC /etc/localtime
-#           sudo apt-get update
-#           sudo apt-get upgrade -y
-#           sudo apt-get install -y apt-utils git lsb-core ninja-build npm \
-#             python3 wget
 #
 #       - name: Export settings from npm package
 #         run: npm run export_npm_env
@@ -174,9 +146,7 @@ jobs:
 #       #       android-v8-
 #
 #       - name: Setup V8 build environment
-#         run: |
-#           scripts/setup.sh -r ${{ env.V8_VERSION }} android
-#           sudo sh -c 'echo "/usr/i686-linux-gnu/lib" >> /etc/ld.so.conf.d/i386-linux-gnu.conf' && sudo ldconfig
+#         run: scripts/setup.sh -r ${{ env.V8_VERSION }} android
 #
 #       - name: Patch V8
 #         run: scripts/patch.sh android
