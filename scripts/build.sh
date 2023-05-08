@@ -48,17 +48,7 @@ if [[ ${PLATFORM} = "ios" ]]; then
   "
   # Build certain components
   NINJA_TARGETS=(
-    v8_base_without_compiler
-    v8_compiler
-    v8_libplatform
-    v8_libbase
-    v8_bigint
-    v8_snapshot
-    torque_generated_initializers
-    torque_generated_definitions
-    cppgc_base
-    v8_heap_base_headers
-    v8_heap_base
+    ${IOS_MODULES[@]}
     inspector
   )
 elif [[ ${PLATFORM} = "android" ]]; then

@@ -51,3 +51,17 @@ export IOS_TARGET_ENV=${IOS_TARGET_ENV:-simulator}
 export PATH="$DEPOT_TOOLS_DIR:$PATH"
 PLATFORM=$(verify_platform "$1")
 export PLATFORM
+
+export IOS_MODULES=(
+  cppgc_base
+  torque_generated_definitions
+  torque_generated_initializers
+  v8_base_without_compiler
+  v8_bigint
+  v8_compiler
+  v8_heap_base
+  v8_heap_base_headers
+  v8_libbase
+  v8_libplatform
+  v8_snapshot
+)

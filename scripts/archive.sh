@@ -79,23 +79,48 @@ function copyDylibAndroid() {
   cp -f "$BUILD_ARCH_OUTPUT/obj/libv8_monolith.a" "$ANDROID_DIST_PATH/libs/$NORMALIZED_ARCH/"
 }
 
+function archiveLibIOS() {
+  MODULE_DEST="$1"
+  OBJECTS="$2"
+
+  echo "--- Archiving $MODULE_DEST"
+  echo "    OBJECTS= $OBJECTS"
+  ar r $MODULE_DEST $OBJECTS || echo "Failed to archive $MODULE_DEST"
+
+  if [[ "$BUILD_TYPE" = "Release" ]]; then
+    echo "--- Stripping $MODULE_DEST"
+    strip $MODULE_DEST || echo "Failed to strip $MODULE_DEST"
+  fi
+}
+
 function copyDylibIOS() {
   printf "\n\n\t\t===================== copy dylib =====================\n\n"
-  LIBDIR="$IOS_DIST_PATH/lib/$NORMALIZED_ARCH/"
-  mkdir -p "$LIBDIR"
-  pushd "$BUILD_ARCH_OUTPUT/obj/" >/dev/null
-  # libv8_heap_base_headers.a only present in debug builds
-  cp -f libcppgc_base.a libtorque_generated_definitions.a \
-    libtorque_generated_initializers.a libv8_base_without_compiler.a \
-    libv8_bigint.a libv8_compiler.a libv8_heap_base*.a \
-    libv8_libbase.a libv8_libplatform.a libv8_snapshot.a \
-    "$LIBDIR"
-  popd >/dev/null
-  pushd "$BUILD_ARCH_OUTPUT/obj/third_party/inspector_protocol/" >/dev/null
-  cp -f libcrdtp.a libcrdtp_platform.a "$LIBDIR"
-  popd >/dev/null
+  LIBDIR="$IOS_DIST_PATH/lib/$NORMALIZED_ARCH"
+  mkdir -p "$LIBDIR/"
+
+  for MODULE in ${IOS_MODULES[@]}; do
+    archiveLibIOS "$LIBDIR/lib$MODULE.a" "$BUILD_ARCH_OUTPUT/obj/$MODULE/*.o"
+  done
+  archiveLibIOS "$LIBDIR/libcrdtp.a" \
+    "$BUILD_ARCH_OUTPUT/obj/third_party/inspector_protocol/crdtp/*.o"
+  archiveLibIOS "$LIBDIR/libcrdtp_platform.a" \
+    "$BUILD_ARCH_OUTPUT/obj/third_party/inspector_protocol/crdtp_platform/*.o"
+
+  ZLIB_INPUT="
+    $BUILD_ARCH_OUTPUT/obj/third_party/zlib/zlib/*.o
+    $BUILD_ARCH_OUTPUT/obj/third_party/zlib/google/compression_utils_portable/*.o
+  "
+  if [ $ARCH = "arm64" ]; then
+      ZLIB_INPUT="
+        $ZLIB_INPUT
+        $BUILD_ARCH_OUTPUT/obj/third_party/zlib/zlib_adler32_simd/*.o
+        $BUILD_ARCH_OUTPUT/obj/third_party/zlib/zlib_inflate_chunk_simd/*.o
+      "
+  fi
+  archiveLibIOS "$LIBDIR/libzip.a" "$ZLIB_INPUT"
+
   pushd "$BUILD_ARCH_OUTPUT/obj/src/inspector/" >/dev/null
-  cp -f libinspector.a libinspector_string_conversions.a "$LIBDIR"
+  cp -f libinspector.a libinspector_string_conversions.a "$LIBDIR/"
   popd >/dev/null
   unset LIBDIR
 }
