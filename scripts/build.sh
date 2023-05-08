@@ -42,6 +42,8 @@ if [[ ${PLATFORM} = "ios" ]]; then
     ios_enable_code_signing=false
     v8_enable_pointer_compression=false
     v8_enable_lite_mode=true
+    v8_control_flow_integrity=false
+    v8_enable_sandbox=false
     ios_deployment_target=\"${IOS_DEPLOYMENT_TARGET}\"
     target_environment=\"${IOS_TARGET_ENV}\"
   "

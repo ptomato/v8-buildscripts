@@ -44,7 +44,7 @@ export DIST_DIR="$ROOT_DIR/dist"
 export PATCHES_DIR="$ROOT_DIR/patches"
 
 export NDK_VERSION="r21e"
-export IOS_DEPLOYMENT_TARGET="9"
+export IOS_DEPLOYMENT_TARGET="12"
 # "simulator", "device", "catalyst"
 export IOS_TARGET_ENV=${IOS_TARGET_ENV:-simulator}
 
