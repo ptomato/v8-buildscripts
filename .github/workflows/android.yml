@@ -3,6 +3,16 @@ name: Build for Android
 on:
   workflow_dispatch:
     inputs:
+      arch:
+        description: Architecture to build
+        required: true
+        default: arm64
+        type: choice
+        options:
+          - arm
+          - x86
+          - arm64
+          - x64
       publish:
         description: Artifacts to publish
         required: true
@@ -43,25 +53,10 @@ jobs:
       - name: Patch V8
         run: scripts/patch.sh android
 
-      # - name: Build V8 arm
-      #   run: |
-      #     scripts/build.sh -j2 android arm
-      #     scripts/archive.sh android arm ${{ inputs.publish }}
-
-      # - name: Build V8 x86
-      #   run: |
-      #     scripts/build.sh -j2 android x86
-      #     scripts/archive.sh android x86 ${{ inputs.publish }}
-
-      - name: Build V8 arm64
+      - name: Build V8
         run: |
-          scripts/build.sh -j2 android arm64
-          scripts/archive.sh android arm64 ${{ inputs.publish }}
-
-      # - name: Build V8 x64
-      #   run: |
-      #     scripts/build.sh -j2 android x64
-      #     scripts/archive.sh android x64 ${{ inputs.publish }}
+          scripts/build.sh -j2 android ${{ inputs.arch }}
+          scripts/archive.sh android ${{ inputs.arch }} ${{ inputs.publish }}
 
       - name: Archive
         run: |

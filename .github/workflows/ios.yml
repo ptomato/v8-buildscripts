@@ -3,6 +3,31 @@ name: iOS build
 on:
   workflow_dispatch:
     inputs:
+      arch_arm64_device:
+        description: Build arm64-iphoneos
+        required: true
+        default: true
+        type: boolean
+      arch_arm64_simulator:
+        description: Build arm64-iphonesimulator
+        required: true
+        default: true
+        type: boolean
+      arch_arm64_catalyst:
+        description: Build arm64-maccatalyst
+        required: true
+        default: true
+        type: boolean
+      arch_x86_64_simulator:
+        description: Build x86_64-iphonesimulator
+        required: true
+        default: true
+        type: boolean
+      arch_x86_64_catalyst:
+        description: Build x86_64-maccatalyst
+        required: true
+        default: true
+        type: boolean
       publish:
         description: Artifacts to publish
         required: true
@@ -37,7 +62,42 @@ jobs:
       run: |
         scripts/patch.sh ios
 
-    - name: Build V8
+    - name: Build V8 (arm64 device)
+      if: ${{ inputs.arch_arm64_device }}
+      env:
+        IOS_TARGET_ENV: device
+      run: |
+        scripts/build.sh -j3 ios arm64
+        scripts/archive.sh ios arm64 ${{ inputs.publish }}
+
+    - name: Build V8 (arm64 simulator)
+      if: ${{ inputs.arch_arm64_simulator }}
+      env:
+        IOS_TARGET_ENV: simulator
+      run: |
+        scripts/build.sh -j3 ios arm64
+        scripts/archive.sh ios arm64 ${{ inputs.publish }}
+
+    - name: Build V8 (arm64 catalyst)
+      if: ${{ inputs.arch_arm64_catalyst }}
+      env:
+        IOS_TARGET_ENV: catalyst
+      run: |
+        scripts/build.sh -j3 ios arm64
+        scripts/archive.sh ios arm64 ${{ inputs.publish }}
+
+    - name: Build V8 (x64 simulator)
+      if: ${{ inputs.arch_x86_64_simulator }}
+      env:
+        IOS_TARGET_ENV: simulator
+      run: |
+        scripts/build.sh -j3 ios x64
+        scripts/archive.sh ios x64 ${{ inputs.publish }}
+
+    - name: Build V8 (x64 catalyst)
+      if: ${{ inputs.arch_x86_64_catalyst }}
+      env:
+        IOS_TARGET_ENV: catalyst
       run: |
         scripts/build.sh -j3 ios x64
         scripts/archive.sh ios x64 ${{ inputs.publish }}
