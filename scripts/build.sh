@@ -74,6 +74,12 @@ else
   '
 fi
 
+if [[ "$PLATFORM" = ios && "$BUILD_TYPE" = debug ]]; then
+  # iOS overrides is_component_build to be the value of is_debug, and component
+  # build is incompatible with monolithic. Override monolithic in that case.
+  GN_ARGS_BUILD_TYPE="$GN_ARGS_BUILD_TYPE v8_monolithic=false"
+fi
+
 cd "$V8_DIR"
 
 function buildArch()
