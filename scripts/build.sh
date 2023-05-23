@@ -24,9 +24,6 @@ GN_ARGS_BASE="
   v8_static_library=true
   use_custom_libcxx=false
   treat_warnings_as_errors=false
-  symbol_level=0
-  v8_enable_v8_checks=false
-  v8_enable_debugging_features=false
   v8_use_external_startup_data=false
   v8_enable_i18n_support=false
   target_os=\"${PLATFORM}\"
@@ -65,12 +62,18 @@ if [[ "$BUILD_TYPE" = "debug" ]]
 then
   GN_ARGS_BUILD_TYPE='
     is_debug=true
+    v8_enable_v8_checks=true
+    v8_enable_debugging_features=true
+    v8_enable_object_print=true
     symbol_level=2
   '
 else
   GN_ARGS_BUILD_TYPE='
     is_official_build=true
     is_debug=false
+    v8_enable_v8_checks=false
+    v8_enable_debugging_features=false
+    symbol_level=0
   '
 fi
 
