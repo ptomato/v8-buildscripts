@@ -32,7 +32,6 @@ GN_ARGS_BASE="
 if [[ ${PLATFORM} = "ios" ]]; then
   GN_ARGS_BASE="
     ${GN_ARGS_BASE}
-    enable_ios_bitcode=false
     ios_enable_code_signing=false
     v8_enable_pointer_compression=false
     v8_enable_lite_mode=true
