@@ -1,49 +1,57 @@
-From 071cc2cd37d589f092aef6f751b4756b401fee99 Mon Sep 17 00:00:00 2001
+From c1b07082dea158d5a3a3c1f1f5ad719db16db0a4 Mon Sep 17 00:00:00 2001
 From: Philip Chimento <pchimento@igalia.com>
-Date: Thu, 4 May 2023 14:54:31 -0700
+Date: Mon, 4 Sep 2023 13:03:15 -0700
 Subject: [PATCH] Comment out dependencies
 
 Skip installing the dependencies only needed for ChromeOS since we are
-not building ChromeOS. Skip installing snapcraft since snapd is not
-available in Docker.
+not building ChromeOS.
 
 Note: this patch is applied in setup.sh rather than patch.sh.
 
 ---
 
-diff --git a/build/install-build-deps.sh b/build/install-build-deps.sh
-index 260373a2f..7c20b7dd5 100755
---- a/build/install-build-deps.sh
-+++ b/build/install-build-deps.sh
-@@ -208,7 +208,6 @@ dev_list="\
-   xcompmgr
-   xz-utils
-   zip
--  $chromeos_dev_list
- "
+diff --git a/build/install-build-deps.py b/build/install-build-deps.py
+index 9d927e632..2bd1def2a 100755
+--- a/build/install-build-deps.py
++++ b/build/install-build-deps.py
+@@ -259,13 +259,13 @@ def dev_list():
+       "zip",
+   ]
  
- # 64-bit systems need a minimum set of 32-bit compat packages for the pre-built
-@@ -281,7 +280,6 @@ fi
- # Full list of required run-time libraries
- lib_list="\
-   $common_lib_list
--  $chromeos_lib_list
- "
+-  # Packages needed for chromeos only
+-  packages += [
+-      "libbluetooth-dev",
+-      "libxkbcommon-dev",
+-      "mesa-common-dev",
+-      "zstd",
+-  ]
++  # # Packages needed for chromeos only
++  # packages += [
++  #     "libbluetooth-dev",
++  #     "libxkbcommon-dev",
++  #     "mesa-common-dev",
++  #     "zstd",
++  # ]
  
- # this can be moved into the lib list without a guard when xenial is deprecated
-@@ -562,9 +560,9 @@ fi
- if package_exists libinput-dev; then
-     dev_list="${dev_list} libinput-dev"
- fi
--if package_exists snapcraft; then
--    dev_list="${dev_list} snapcraft"
--fi
-+# if package_exists snapcraft; then
-+#     dev_list="${dev_list} snapcraft"
-+# fi
+   if package_exists("realpath"):
+     packages.append("realpath")
+@@ -378,11 +378,11 @@ def lib_list():
+       "zlib1g",
+   ]
  
- # Cross-toolchain strip is needed for building the sysroots.
- if package_exists binutils-arm-linux-gnueabihf; then
+-  # Run-time libraries required by chromeos only
+-  packages += [
+-      "libpulse0",
+-      "libbz2-1.0",
+-  ]
++  # # Run-time libraries required by chromeos only
++  # packages += [
++  #     "libpulse0",
++  #     "libbz2-1.0",
++  # ]
+ 
+   if package_exists("libffi8"):
+     packages.append("libffi8")
 -- 
-2.38.1
+2.41.0
 

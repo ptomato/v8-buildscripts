@@ -48,28 +48,19 @@ if [[ ${PLATFORM} = "android" ]]; then
   # Patch build-deps installer to install fewer dependencies
   patch -d "${V8_DIR}" -p1 < "${PATCHES_DIR}/fewer_deps.patch"
 
-  sudo bash -c 'v8/build/install-build-deps-android.sh'
+  sudo bash -c 'v8/build/install-build-deps.py --android --arm --no-backwards-compatible'
   sudo apt-get -y install \
-      libc6-dev-i386 \
-      libc6-dev-armel-cross \
-      libc6-dev-armhf-cross \
-      libc6-dev-arm64-cross \
-      libc6-dev-armel-armhf-cross \
-      libgcc-10-dev-armhf-cross \
       lib32stdc++-9-dev \
-      libx32stdc++-9-dev \
-      libstdc++-10-dev-armhf-cross \
-      libstdc++-9-dev-armhf-cross \
-      libsfstdc++-10-dev-armhf-cross
+      libx32stdc++-9-dev
 
   # Reset changes after installation
   patch -d "${V8_DIR}" -p1 -R < "${PATCHES_DIR}/fewer_deps.patch"
 
-  # Workaround to install missing sysroot
-  gclient sync
+  # # Workaround to install missing sysroot
+  # gclient sync
 
-  # Workaround to install missing android_sdk tools
-  gclient sync --deps=android
+  # # Workaround to install missing android_sdk tools
+  # gclient sync --deps=android
 
   installNDK
   exit 0

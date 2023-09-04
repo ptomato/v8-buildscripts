@@ -49,9 +49,10 @@ elif [[ ${PLATFORM} = "android" ]]; then
   # Workaround v8 sysroot build issues with custom ndk
   GN_ARGS_BASE="${GN_ARGS_BASE} use_thin_lto=false use_sysroot=false"
   # WebAssembly not compatible with JITless lite mode
+  # API level 18 needed for getauxval() in cpu_features
   GN_ARGS_BASE="$GN_ARGS_BASE
     v8_enable_webassembly=true
-    default_min_sdk_version=17
+    default_min_sdk_version=18
   "
   # Default target
   NINJA_TARGETS=()
